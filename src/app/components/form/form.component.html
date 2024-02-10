@@ -1,0 +1,149 @@
+<div class="container nt-5 ">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="titulo">Empleado</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-lg-6">
+                <div class="card-body">
+            <div class="card ">
+                <h5 class="titulo text-center">
+                        Agregar Empleado
+                    </h5>
+                    <form [formGroup]="form" (ngSubmit)="guardarEmpleado()">
+                        <div class="mb-3 mx-3">
+                            <label for="CedulaInput" class="form-label">Cedula</label>
+                            <input type="text" class="form-control" id="floatingInput" placeholder="cedula" formControlName="cedula">
+                            <ng-container
+                                [ngTemplateOutlet]="formError"
+                                [ngTemplateOutletContext]="{
+                                    validation: 'required',
+                                    message: 'La cedula es requerido',
+                                    control: form.controls['cedula']
+                                }"
+                            ></ng-container>
+                            <ng-container
+                                [ngTemplateOutlet]="formError"
+                                [ngTemplateOutletContext]="{
+                                    validation: 'minlength',
+                                    message: 'La cedula debe de tener minimo 10 digitos',
+                                    control: form.controls['cedula']
+                                }"
+                            ></ng-container>
+                            <ng-container
+                                [ngTemplateOutlet]="formError"
+                                [ngTemplateOutletContext]="{
+                                    validation: 'maxLength',
+                                    message: 'La cedula debe tener maximo 10 digitos',
+                                    control: form.controls['cedula']
+                                }"
+                            ></ng-container>
+                            <ng-container
+                                [ngTemplateOutlet]="formError"
+                                [ngTemplateOutletContext]="{
+                                    validation: 'pattern',
+                                    message: 'La cedula debe de ser numerico',
+                                    control: form.controls['cedula']
+                                }"
+                            ></ng-container>
+                        </div>
+                        <div class="mb-3 mx-3">
+                            <label for="NombreInput" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="floatingPassword" placeholder="Nombre" formControlName="nombre">
+                            <ng-container
+                                [ngTemplateOutlet]="formError"
+                                [ngTemplateOutletContext]="{
+                                    validation: 'required',
+                                    message: 'El nombre es requerido',
+                                    control: form.controls['nombre']
+                                }"
+                            ></ng-container>
+                            <ng-container
+                                [ngTemplateOutlet]="formError"
+                                [ngTemplateOutletContext]="{
+                                    validation: 'minlength',
+                                    message: 'El nombre debe de tener minimo 8 caracteres',
+                                    control: form.controls['nombre']
+                                }"
+                            ></ng-container>
+                            <ng-container
+                                [ngTemplateOutlet]="formError"
+                                [ngTemplateOutletContext]="{
+                                    validation: 'maxLength',
+                                    message: 'El nombre debe tener maximo 16 caracteres',
+                                    control: form.controls['nombre']
+                                }"
+                            ></ng-container>
+                        </div>
+                        <div class="mb-3 mx-3">
+                            <label for="formFile" class="form-label">Foto Del Empleado</label>
+                            <input class="form-control" type="file" id="formFile" formControlName="fotoEmpleado" #fileInput>
+                            
+                        </div>
+                        <div class="mb-3 mx-3">
+                            <label for="CedulaInput" class="form-label">Fecha De Ingreso</label>
+                            <input type="date" class="form-control" id="floatingInput" placeholder="Fecha Ingreso" formControlName="fechaIngreso" >
+                            
+                        </div>
+                        <div class="mb-3 mx-3">
+                            <label for="floatingSelect">Cargos De La Empresa</label>
+                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" formControlName="cargo">
+                                <option selected disabled>Seleccionar cargo</option>
+                                <option *ngFor="let cargo of listCargos" [value]="cargo.id">{{cargo.nombre}}</option>
+                            </select>
+                            
+                        </div>
+                        <div class="mb-3 mx-3">
+                            <button [disabled]="this.form.invalid" type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-database"></i> Guardar Empleado</button>
+                        </div>
+                    </form>
+                    <ng-template
+                        #formError
+                        let-control="control"
+                        let-message="message"
+                        let-validation="validation"
+                    >
+                        <ng-container
+                            *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+                        >
+                            <div class="field p-fluid">
+                                <small id="username-help" class="p-error text-xl">
+                                    {{ message }}
+                                </small>
+                            </div>
+                        </ng-container>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="titulo">Listado De Empleado</h5>
+                    <table class="table">
+                        <tbody>
+                            <tr *ngFor="let empleado of listEmpleados; let i = index">
+                                <td>{{empleado.id}}</td>
+                                <td><img [src]="sanitizeImageUrl(empleado.foto)" alt="Imagen del empleado"></td>
+                                <td>{{empleado.cedula}}</td>
+                                <td>{{empleado.nombre}}</td>
+                                <td>{{empleado.fechaIngreso}}</td>
+                                
+                                <td><i (click)="editarEmpleado(empleado)" class="far fa-edit text-info"></i></td>
+                                <td>
+                                    <i class="far fa-trash-alt text-danger" (click)="eliminarEmpleado(empleado.id)"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
